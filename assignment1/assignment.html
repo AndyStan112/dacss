@@ -1,0 +1,51 @@
+<html>
+
+<body>
+    <div id="region-main-box" class="col-12"><section id="region-main"><span class="notifications" id="user-notifications"></span><span id="maincontent"></span>
+    <h2>Assignment 1 Description</h2>
+<div class="activity-header" data-for="page-activity-header">
+        <span class="visually-hidden">Cerințe pentru finalizare</span>
+        <div data-region="activity-information" data-activityname="Assignment 1 Description" class="activity-information">
+
+
+</div>
+</div><div role="main"><div class="box generalbox center clearfix"><div class="no-overflow"><h1>Assignment 1: Event Driven Architectures. Publish-Subscribe Infrastructures</h1>
+<h3>Smart City Surveillance System&nbsp;&nbsp;</h3>
+<p>A city is deploying a complex surveillance system to improve safety, traffic control and cleanliness in the city. Across the whole city there are different surveillance cameras of different types:</p>
+<ul>
+<li>Speed cameras on roads to detect speeding vehicles.</li>
+<li>Traffic cameras to report congestion on roads.</li>
+<li>Public surveillance cameras in parks and streets to detect bad behaviour such as people throwing garbage on the street.</li>
+</ul>
+<p>Information gathered from speed cameras will be used by Traffic Police in order to record the driver's offence and to issue a fine.</p>
+<p>Information gathered from the public surveillance cameras is used by the Local Police in order to issue fines.</p>
+<p>Information from traffic cameras is used by several navigation apps in order to update their maps information.</p>
+<p>There is also a City Information Dashboard that displays the numbers of fines given for speeding and for throwing garbage and identfies the most dangerous neighborhoods (areas with biggest number of problems).</p>
+<p>Because the system must handle a big number of cameras and real-time events, the city decides to implement the platform using Event-Driven Architecture (EDA) using a Publish–Subscribe messaging system. This will allow the city to easily add new services (analytics, notifications) without modifying existing components.</p>
+<h4>Basic requirements</h4>
+<p>Identify the&nbsp;<strong>types of events</strong>, the&nbsp;<strong>associated data</strong>, the&nbsp;<strong>components involved</strong>&nbsp;and their roles as&nbsp;<strong>Publishers</strong>&nbsp;and/or&nbsp;<strong>Subscribers</strong>.</p>
+<p><strong>Implement </strong>a very simplified simulation of the city surveillance system using an&nbsp;<strong>in-process</strong>&nbsp;event bus with&nbsp;<strong>no concurrency</strong>&nbsp;and&nbsp;<strong>synchronous</strong>&nbsp;event delivery.</p>
+<p><strong>Draw a sequence diagram </strong>showing what happens when a speed camera identifies a car having high speed.</p>
+<h4>Bonus requirement (1 point)</h4>
+<p>In order to make the simulation more realistic,&nbsp;<strong>all surveillance cameras work concurrently, each running in its own thread</strong>.</p>
+<h4>Bonus requirement (1 point)</h4>
+<p>In addition to the in-process version of the system, implement a second version, having&nbsp;<strong>all participants running in separate processes</strong>&nbsp;and use a messaging infrastructure for&nbsp;<strong>distributed Publish-Subscribe</strong>&nbsp;communication.</p>
+<h3>Frameworks to use</h3>
+<p>Suggested frameworks are Greenrobot for an in-process event bus and RabbitMQ as a distributed Publish-Subscribe. Alternative equivalent frameworks are also accepted.</p>
+<h3>Deadlines and Grading</h3>
+<p>The deadline for this assignment is in Week 5. See the Grading Policy on CV for &nbsp;<a href="https://cv.upt.ro/mod/page/view.php?id=466654">DACSS Labs and Grading</a>.</p>
+<h3>Greenrobot - Getting Started</h3>
+<p>Lecture slides: week 2&nbsp;<a href="http://staff.cs.upt.ro/~ioana/arhit-engl/curs/PublishSubscribe-Greenrobot.pdf">PublishSubscribe-Greenrobot.pdf</a></p>
+<p>Source code of example from lecture: &nbsp;<a href="https://staff.cs.upt.ro/~ioana/arhit-engl/curs/exemple/green1/src.zip">src.zip</a>,&nbsp;<a href="https://staff.cs.upt.ro/~ioana/arhit-engl/curs/exemple/green1/pom.xml">pom.xml</a>.</p>
+<p>Greenrobot Eventbus Documentation:&nbsp;<a href="http://greenrobot.org/eventbus/documentation/">https://greenrobot.org/eventbus/documentation/</a></p>
+<p>Additional info on Java threads:&nbsp;<a href="http://staff.cs.upt.ro/~ioana/arhit-engl/curs/JavaThreads.pdf">JavaThreads.pdf</a></p>
+<h3>RabbitMQ - Getting Started</h3>
+<p>Lecture slides: week 3 <a href="https://staff.cs.upt.ro/~ioana/arhit-engl/curs/PublishSubscribe-RabbitMQ.pdf">PublishSubscribe-RabbitMQ.pdf</a></p>
+<p>Source code of example from lecture: &nbsp;<a href="https://staff.cs.upt.ro/~ioana/arhit-engl/curs/exemple/rabbitmq1/rabbitmq1.zip">rabbitmq1.zip</a></p>
+<p>Download and Install RabbitMQ: see <a href="https://www.rabbitmq.com/docs/download">link</a></p>
+<p>RabbitMQ tutorial - Publish/Subscribe:&nbsp;<a href="http://www.rabbitmq.com/tutorials/tutorial-three-java">https://www.rabbitmq.com/tutorials/tutorial-three-java</a></p></div></div></div><div id="adaptable-activity-navigation">
+   
+    
+</div></section></div>
+</body>
+</html>
