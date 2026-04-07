@@ -27,7 +27,7 @@ class Police:
                 return
             self.bus.dispatch(BehaviourFineEvent(area=event.area, behaviour=event.behaviour))
                 
+        self.bus.on(PublicEvent, behaviour_handler)
         self.bus.on(SpeedingEvent, speeding_handler)
-        self.bus.on(BehaviourFineEvent, behaviour_handler)
         while(1):
             await asyncio.sleep(10)

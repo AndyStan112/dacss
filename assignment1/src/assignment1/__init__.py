@@ -1,4 +1,5 @@
 import asyncio
+from assignment1.Police import Police
 from bubus import EventBus, BaseEvent
 from assignment1.SpeedCamera import SpeedCamera
 from assignment1.TrafficCamera import TrafficCamera
@@ -28,8 +29,13 @@ async def main() -> None:
             NavigationApp("google maps", bus).run()
     ]
 
+    police = [
+        Police(bus, "Complex").run(),
+        Police(bus, "Fabric").run()
+    ]
 
-    await asyncio.gather(*speed_cameras, *traffic_cameras, *public_cameras, *apps)
+
+    await asyncio.gather(*speed_cameras, *traffic_cameras, *public_cameras, *apps, *police)
 
 
 asyncio.run(main())
