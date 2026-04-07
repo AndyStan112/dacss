@@ -1,7 +1,7 @@
 import asyncio
 
 
-from assignment1.events import SpeedingFineEvent, SpeedingEvent
+from assignment1.events import BehaviourFineEvent, SpeedingFineEvent, SpeedingEvent
 from bubus import EventBus
 
 
@@ -12,7 +12,7 @@ class Police:
 
 
     async def run(self):
-        async def handler(event:SpeedingEvent):
+        async def speeding_handler(event:SpeedingEvent):
             print(f"Police in {self.area} was informed of speeding in {event.area} at {event.speed} km/h")
             if event.area != self.area:
                 return
@@ -21,7 +21,13 @@ class Police:
                 return
             self.bus.dispatch(SpeedingFineEvent(area=event.area, speed=event.speed))
 
+        async def behaviour_handler(event:BehaviourFineEvent):
+            print(f"Police in {self.area} was informed of {event.behaviour} behaviour in {event.area}")
+            if event.area != self.area:
+                return
+            self.bus.dispatch(BehaviourFineEvent(area=event.area, behaviour=event.behaviour))
                 
-        self.bus.on(SpeedingEvent, handler)
+        self.bus.on(SpeedingEvent, speeding_handler)
+        self.bus.on(BehaviourFineEvent, behaviour_handler)
         while(1):
             await asyncio.sleep(10)
