@@ -1,7 +1,7 @@
 import asyncio
 
 
-from assignment1.events import BehaviourFineEvent, SpeedingFineEvent, SpeedingEvent
+from assignment1.events import BehaviourFineEvent, PublicEvent, SpeedingFineEvent, SpeedingEvent
 from bubus import EventBus
 
 
@@ -21,7 +21,7 @@ class Police:
                 return
             self.bus.dispatch(SpeedingFineEvent(area=event.area, speed=event.speed))
 
-        async def behaviour_handler(event:BehaviourFineEvent):
+        async def behaviour_handler(event:PublicEvent):
             print(f"Police in {self.area} was informed of {event.behaviour} behaviour in {event.area}")
             if event.area != self.area:
                 return
