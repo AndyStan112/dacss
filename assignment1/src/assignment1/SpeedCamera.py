@@ -7,7 +7,7 @@ class SpeedCamera:
         self.area = area
         self.bus = bus
     def publish(self, speed:int):
-        self.bus.dispatch(SpeedingEvent(area=self.area, speed=speed))
+        self.bus.dispatch(SpeedingEvent(area=self.area, speed=speed, speed_limit=self.speed_limit))
 
     async def run(self):
         while(1):
