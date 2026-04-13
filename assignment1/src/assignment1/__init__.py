@@ -1,5 +1,6 @@
 import asyncio
 from assignment1.Police import Police
+from assignment1.dashboard import Dashboard
 from bubus import EventBus, BaseEvent
 from assignment1.SpeedCamera import SpeedCamera
 from assignment1.TrafficCamera import TrafficCamera
@@ -34,8 +35,10 @@ async def main() -> None:
         Police(bus, "Fabric").run()
     ]
 
+    dashboard = Dashboard(bus).run()
 
-    await asyncio.gather(*speed_cameras, *traffic_cameras, *public_cameras, *apps, *police)
+
+    await asyncio.gather(*speed_cameras, *traffic_cameras, *public_cameras, *apps, *police, dashboard)
 
 
 asyncio.run(main())
