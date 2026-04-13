@@ -1,7 +1,7 @@
-
 import asyncio
 
 from assignment1.events import BehaviourFineEvent, SpeedingFineEvent
+
 
 class Dashboard:
     def __init__(self, bus):
@@ -9,7 +9,10 @@ class Dashboard:
         self.fines = {}
         self.lock = asyncio.Lock()
 
-    async def run(self):
+    def register_handlers(self):
+        if self.bus is None:
+            return
+
         async def speeding_handler(event: SpeedingFineEvent):
             async with self.lock:
                 if event.area not in self.fines:
@@ -22,10 +25,12 @@ class Dashboard:
                     self.fines[event.area] = {"speeding": 0, "behaviour": 0}
                 self.fines[event.area]["behaviour"] += 1
 
-                
         self.bus.on(BehaviourFineEvent, behaviour_handler)
         self.bus.on(SpeedingFineEvent, speeding_handler)
-        while(1):
+
+    async def run(self):
+        self.register_handlers()
+        while 1:
             await asyncio.sleep(10)
             print("Dashboard: Fines issued per area:")
             async with self.lock:
