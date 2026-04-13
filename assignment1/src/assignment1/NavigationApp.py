@@ -1,5 +1,6 @@
 import asyncio
 
+from assignment1.event_bus import EventBusWrapper
 from assignment1.events import TrafficEvent
 from bubus import EventBus
 
@@ -7,20 +8,20 @@ from bubus import EventBus
 class NavigationApp:
     def __init__(self, name: str, bus: EventBus):
         self.name = name
-        self.bus = bus
+        self.event_bus = EventBusWrapper(bus, f"navigation-app-{name}")
 
-    def register_handlers(self):
-        if self.bus is None:
-            return
-
+    async def register_handlers(self):
         async def handler(event: TrafficEvent):
             print(
                 f"Navigation app '{self.name}' was informed of congestion in {event.area} on {event.road}"
             )
 
-        self.bus.on(TrafficEvent, handler)
+        await self.event_bus.subscribe(TrafficEvent, handler)
 
     async def run(self):
-        self.register_handlers()
-        while 1:
-            await asyncio.sleep(10)
+        try:
+            await self.register_handlers()
+            while 1:
+                await asyncio.sleep(10)
+        finally:
+            await self.event_bus.close()
