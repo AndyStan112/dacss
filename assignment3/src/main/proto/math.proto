@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package course_examples.grpc;
+
+option java_multiple_files = true;
+
+service MathService {
+  rpc Add (BinaryOpRequest) returns (BinaryOpResponse);
+  rpc Mult (BinaryOpRequest) returns (BinaryOpResponse);
+}
+
+message BinaryOpRequest {
+  int32 a = 1;
+  int32 b = 2;
+}
+
+message BinaryOpResponse {
+  int32 result = 1;
+}
