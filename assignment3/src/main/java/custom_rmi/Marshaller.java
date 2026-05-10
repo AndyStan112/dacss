@@ -65,7 +65,11 @@ public class Marshaller {
             if (response.isSuccess()) {
                 writeValue(out, response.getResult());
             } else {
-                out.writeUTF(response.getErrorMessage());
+                out.writeUTF(
+                        response.getErrorMessage() == null
+                                ? "Unknown remote error"
+                                : response.getErrorMessage()
+                );
             }
 
             out.flush();

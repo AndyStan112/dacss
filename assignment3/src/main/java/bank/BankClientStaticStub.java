@@ -3,7 +3,7 @@ package bank;
 public class BankClientStaticStub {
 
     public static void main(String[] args) {
-        BankService bank = new BankServiceStaticStub(
+        BankService bank = new BankServiceStub(
                 "localhost",
                 9001,
                 "BankService"

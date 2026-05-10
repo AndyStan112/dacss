@@ -8,9 +8,12 @@ import java.util.List;
 
 public class RemoteInvocationTransformer implements ByteStreamTransformer {
 
-    private final RemoteObjectRegistry registry;
+    public static final String REGISTRY_OBJECT = "__registry__";
+    public static final String LOOKUP_METHOD = "lookup";
 
-    public RemoteInvocationTransformer(RemoteObjectRegistry registry) {
+    private final RemoteRegistry registry;
+
+    public RemoteInvocationTransformer(RemoteRegistry registry) {
         this.registry = registry;
     }
 
@@ -19,25 +22,88 @@ public class RemoteInvocationTransformer implements ByteStreamTransformer {
         try {
             RemoteCallRequest request = Marshaller.unmarshalRequest(input);
 
-            Object targetObject = registry.lookup(request.getObjectName());
-
-            if (targetObject == null) {
-                return Marshaller.marshalResponse(
-                        RemoteCallResponse.error("Remote object not found: " + request.getObjectName())
-                );
+            if (isRegistryLookup(request)) {
+                return handleRegistryLookup(request);
             }
 
-            Object result = invokeMethod(targetObject, request.getMethodName(), request.getArguments());
-
-            return Marshaller.marshalResponse(RemoteCallResponse.success(result));
+            return handleRemoteMethodCall(request);
 
         } catch (Exception e) {
-            return Marshaller.marshalResponse(RemoteCallResponse.error(e.getMessage()));
+            String errorMessage = extractErrorMessage(e);
+
+            return Marshaller.marshalResponse(
+                    RemoteCallResponse.error(errorMessage)
+            );
         }
     }
 
-    private Object invokeMethod(Object targetObject, String methodName, List<Object> arguments)
+    private String extractErrorMessage(Exception e) {
+        if (e instanceof InvocationTargetException) {
+            Throwable targetException =
+                    ((InvocationTargetException) e).getTargetException();
+
+            if (targetException.getMessage() != null) {
+                return targetException.getMessage();
+            }
+
+            return targetException.getClass().getName();
+        }
+
+        if (e.getMessage() != null) {
+            return e.getMessage();
+        }
+
+        return e.getClass().getName();
+    }
+
+    private boolean isRegistryLookup(RemoteCallRequest request) {
+        return REGISTRY_OBJECT.equals(request.getObjectName())
+                && LOOKUP_METHOD.equals(request.getMethodName());
+    }
+
+    private byte[] handleRegistryLookup(RemoteCallRequest request) {
+        String remoteObjectName = (String) request.getArguments().get(0);
+
+        String interfaceName = registry.lookupInterfaceNameLocal(remoteObjectName);
+
+        if (interfaceName == null) {
+            return Marshaller.marshalResponse(
+                    RemoteCallResponse.error("Remote object not found: " + remoteObjectName)
+            );
+        }
+
+        return Marshaller.marshalResponse(
+                RemoteCallResponse.success(interfaceName)
+        );
+    }
+
+    private byte[] handleRemoteMethodCall(RemoteCallRequest request)
             throws InvocationTargetException, IllegalAccessException {
+
+        Object targetObject = registry.lookupObjectLocal(request.getObjectName());
+
+        if (targetObject == null) {
+            return Marshaller.marshalResponse(
+                    RemoteCallResponse.error("Remote object not found: " + request.getObjectName())
+            );
+        }
+
+        Object result = invokeMethod(
+                targetObject,
+                request.getMethodName(),
+                request.getArguments()
+        );
+
+        return Marshaller.marshalResponse(
+                RemoteCallResponse.success(result)
+        );
+    }
+
+    private Object invokeMethod(
+            Object targetObject,
+            String methodName,
+            List<Object> arguments
+    ) throws InvocationTargetException, IllegalAccessException {
 
         Method method = findMatchingMethod(targetObject, methodName, arguments);
 
@@ -48,7 +114,11 @@ public class RemoteInvocationTransformer implements ByteStreamTransformer {
         return method.invoke(targetObject, arguments.toArray());
     }
 
-    private Method findMatchingMethod(Object targetObject, String methodName, List<Object> arguments) {
+    private Method findMatchingMethod(
+            Object targetObject,
+            String methodName,
+            List<Object> arguments
+    ) {
         Method[] methods = targetObject.getClass().getMethods();
 
         for (Method method : methods) {
